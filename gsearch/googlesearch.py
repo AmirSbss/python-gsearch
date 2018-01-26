@@ -10,6 +10,7 @@ from random import choice
 try:
 	# Python 3
 	from urllib import request
+	from urllib import urlencode
 	from html.parser import HTMLParser # keep it to avoid warning
 	from html import unescape
 	from urllib.parse import quote, unquote
@@ -34,11 +35,9 @@ def download(query, num_results):
 	"""
 	downloads HTML after google search
 	"""
-	# https://stackoverflow.com/questions/11818362/how-to-deal-with-unicode-string-in-url-in-python3
-	name = quote(query)
-
-	name  = name.replace(' ','+')
-	url = 'http://www.google.com/search?q=' + name
+	# Encode all characters
+	name = urlencode({"q": query})
+	url = 'http://www.google.com/search?' + name
 	if num_results != 10:
 		url += '&num=' + str(num_results)  # adding this param might hint Google towards a bot
 	req = request.Request(url, headers={
